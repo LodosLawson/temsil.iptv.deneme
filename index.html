@@ -1,21 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPTV Kanal Listesi</title>
 </head>
 <body>
     <h1>IPTV Kanal Listesi</h1>
-    <label for="iptvUrl">IPTV URL'sini Girin:</label>
-    <input type="text" id="iptvUrl" placeholder="http://example.com/iptv.m3u">
-    <button id="getKanalListesiBtn">Kanal Listesini Al</button>
-    <ul id="kanalListesi">
-        <!-- Kanallar burada listelenecek -->
-    </ul>
+    <ul id="kanalListesi"></ul>
 
-    <video id="videoOynatici" controls>
-        <!-- Video oynatıcı burada olacak -->
-    </video>
+    <script>
+        // IPTV URL'sini burada belirtin
+        const iptvUrl = "http://pray45748.cdngold.me/get.php?username=7c8c640943&password=4574cdce6e&type=m3u_plus&output=ts";
 
-    <script src="script.js"></script>
+        // Kanal listesini almak için bir HTTP isteği yapın
+        fetch(iptvUrl)
+            .then(response => response.text())
+            .then(data => {
+                // M3U8 dosyasını satırlara bölelim
+                const lines = data.split("\n");
+                const kanalListesi = [];
+
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].startsWith("#EXTINF")) {
+                        // Kanal başlığı ise, bir sonraki satır URL'dir
+                        kanalListesi.push(lines[i + 1]);
+                    }
+                }
+
+                // Kanal listesini HTML'de görüntüle
+                const kanalListesiElementi = document.getElementById("kanalListesi");
+                kanalListesi.forEach((kanal, index) => {
+                    const listItem = document.createElement("li");
+                    listItem.innerHTML = `<a href="${kanal}" target="_blank">Kanal ${index + 1}</a>`;
+                    kanalListesiElementi.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error("Hata:", error);
+            });
+    </script>
 </body>
 </html>
