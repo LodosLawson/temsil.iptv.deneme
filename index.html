@@ -19,38 +19,68 @@
     <!-- Kanal listesini göstermek için bir liste -->
     <ul id="kanalListesi"></ul>
 
-    
-
     <script>
         // Kullanıcıdan alınan URL ile kanal listesini alın
         function getChannelList() {
             const iptvUrl = document.getElementById("iptvUrl").value;
 
-            fetch(iptvUrl)
-                .then(response => response.text())
-                .then(data => {
-                    const lines = data.split("\n");
-                    const kanalListesi = [];
+            // URL'nin "https" ile başlamadığını kontrol et
+            if (iptvUrl.startsWith("https://")) {
+                fetch(iptvUrl)
+                    .then(response => response.text())
+                    .then(data => {
+                        const lines = data.split("\n");
+                        const kanalListesi = [];
 
-                    for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].startsWith("#EXTINF")) {
-                            kanalListesi.push(lines[i + 1]);
+                        for (let i = 0; i < lines.length; i++) {
+                            if (lines[i].startsWith("#EXTINF")) {
+                                kanalListesi.push(lines[i + 1]);
+                            }
                         }
-                    }
 
-                    // Kanal listesini HTML'de gösterin
-                    const kanalListesiElementi = document.getElementById("kanalListesi");
-                    kanalListesiElementi.innerHTML = ""; // Önceki listeyi temizleyin
+                        // Kanal listesini HTML'de gösterin
+                        const kanalListesiElementi = document.getElementById("kanalListesi");
+                        kanalListesiElementi.innerHTML = ""; // Önceki listeyi temizleyin
 
-                    kanalListesi.forEach((kanal, index) => {
-                        const listItem = document.createElement("li");
-                        listItem.innerHTML = `<a href="#" onclick="showChannel('${kanal}')">Kanal ${index + 1}</a>`;
-                        kanalListesiElementi.appendChild(listItem);
+                        kanalListesi.forEach((kanal, index) => {
+                            const listItem = document.createElement("li");
+                            listItem.innerHTML = `<a href="#" onclick="showChannel('${kanal}')">Kanal ${index + 1}</a>`;
+                            kanalListesiElementi.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Hata:", error);
                     });
-                })
-                .catch(error => {
-                    console.error("Hata:", error);
-                });
+            } else {
+                // "https" ile başlamayan URL'leri bir proxy kullanarak almayı deneyin
+                const proxyUrl = "https://example.com/proxy?url=" + encodeURIComponent(iptvUrl);
+
+                fetch(proxyUrl)
+                    .then(response => response.text())
+                    .then(data => {
+                        const lines = data.split("\n");
+                        const kanalListesi = [];
+
+                        for (let i = 0; i < lines.length; i++) {
+                            if (lines[i].startsWith("#EXTINF")) {
+                                kanalListesi.push(lines[i + 1]);
+                            }
+                        }
+
+                        // Kanal listesini HTML'de gösterin
+                        const kanalListesiElementi = document.getElementById("kanalListesi");
+                        kanalListesiElementi.innerHTML = ""; // Önceki listeyi temizleyin
+
+                        kanalListesi.forEach((kanal, index) => {
+                            const listItem = document.createElement("li");
+                            listItem.innerHTML = `<a href="#" onclick="showChannel('${kanal}')">Kanal ${index + 1}</a>`;
+                            kanalListesiElementi.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Hata:", error);
+                    });
+            }
         }
 
         // Seçilen kanalı video oynatıcıda gösterin
