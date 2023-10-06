@@ -4,6 +4,15 @@ const getKanalListesiBtn = document.getElementById("getKanalListesiBtn");
 const kanalListesi = document.getElementById("kanalListesi");
 const videoOynatici = document.getElementById("videoOynatici");
 
+const httpURL = "http://pray45748.cdngold.me/get.php?username=7c8c640943&password=4574cdce6e&type=m3u_plus&output=ts";
+
+fetch(httpURL)
+    .then(response => response.text())
+    .then(data => {
+        console.log(data); // Veriyi konsola yazdırın
+    })
+    .catch(error => console.error(error));
+
 getKanalListesiBtn.addEventListener("click", () => {
     const iptvUrl = iptvUrlInput.value;
 
