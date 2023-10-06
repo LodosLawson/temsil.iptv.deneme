@@ -22,10 +22,10 @@
                 const kanalListesi = [];
 
                 for (let i = 0; i < lines.length; i++) {
-                    if (lines[i].startsWith("#EXTINF")) {
+                    
                         // Kanal başlığı ise, bir sonraki satır URL'dir
                         kanalListesi.push(lines[i + 1]);
-                    }
+                    
                 }
 
                 // Kanal listesini HTML'de görüntüle
