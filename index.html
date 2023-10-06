@@ -13,11 +13,13 @@
     <input type="text" id="iptvUrl">
     <button onclick="getChannelList()">Kanal Listesini Al</button>
 
+    <!-- Seçilen kanalın gösterimi için bir video oynatıcı -->
+    <video id="videoPlayer" controls width="800" height="600"></video>
+    
     <!-- Kanal listesini göstermek için bir liste -->
     <ul id="kanalListesi"></ul>
 
-    <!-- Seçilen kanalın gösterimi için bir video oynatıcı -->
-    <video id="videoPlayer" controls width="800" height="600"></video>
+    
 
     <script>
         // Kullanıcıdan alınan URL ile kanal listesini alın
