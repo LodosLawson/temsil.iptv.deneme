@@ -23,9 +23,12 @@
         // Kullanıcıdan alınan URL ile kanal listesini alın
         function getChannelList() {
             const iptvUrl = document.getElementById("iptvUrl").value;
+            const kanalListesiElementi = document.getElementById("kanalListesi");
+            kanalListesiElementi.innerHTML = ""; // Önceki listeyi temizleyin
 
-            // URL'nin "https" ile başlamadığını kontrol et
-            if (iptvUrl.startsWith("https://")) {
+            // URL'nin "http" ile başlayıp başlamadığını kontrol edin
+            if (iptvUrl.startsWith("http")) {
+                // HTTP ile başlıyorsa, direkt erişim yapın
                 fetch(iptvUrl)
                     .then(response => response.text())
                     .then(data => {
@@ -39,9 +42,6 @@
                         }
 
                         // Kanal listesini HTML'de gösterin
-                        const kanalListesiElementi = document.getElementById("kanalListesi");
-                        kanalListesiElementi.innerHTML = ""; // Önceki listeyi temizleyin
-
                         kanalListesi.forEach((kanal, index) => {
                             const listItem = document.createElement("li");
                             listItem.innerHTML = `<a href="#" onclick="showChannel('${kanal}')">Kanal ${index + 1}</a>`;
@@ -52,9 +52,8 @@
                         console.error("Hata:", error);
                     });
             } else {
-                // "https" ile başlamayan URL'leri bir proxy kullanarak almayı deneyin
-                const proxyUrl = "https://example.com/proxy?url=" + encodeURIComponent(iptvUrl);
-
+                // HTTP ile başlamıyorsa, bir proxy kullanarak erişim yapın
+                const proxyUrl = "https://cors-anywhere.herokuapp.com/" + iptvUrl;
                 fetch(proxyUrl)
                     .then(response => response.text())
                     .then(data => {
@@ -68,9 +67,6 @@
                         }
 
                         // Kanal listesini HTML'de gösterin
-                        const kanalListesiElementi = document.getElementById("kanalListesi");
-                        kanalListesiElementi.innerHTML = ""; // Önceki listeyi temizleyin
-
                         kanalListesi.forEach((kanal, index) => {
                             const listItem = document.createElement("li");
                             listItem.innerHTML = `<a href="#" onclick="showChannel('${kanal}')">Kanal ${index + 1}</a>`;
