@@ -16,8 +16,8 @@
     <!-- Kanal listesini göstermek için bir liste -->
     <ul id="kanalListesi"></ul>
 
-    <!-- Seçilen kanalın gösterimi için bir iframe -->
-    <iframe id="kanalGosterimi" width="800" height="600" frameborder="0"></iframe>
+    <!-- Seçilen kanalın gösterimi için bir video oynatıcı -->
+    <video id="videoPlayer" controls width="800" height="600"></video>
 
     <script>
         // Kullanıcıdan alınan URL ile kanal listesini alın
@@ -51,10 +51,11 @@
                 });
         }
 
-        // Seçilen kanalı iframe içinde gösterin
+        // Seçilen kanalı video oynatıcıda gösterin
         function showChannel(channelUrl) {
-            const kanalGosterimiElementi = document.getElementById("kanalGosterimi");
-            kanalGosterimiElementi.src = channelUrl;
+            const videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = channelUrl;
+            videoPlayer.play();
         }
     </script>
 </body>
