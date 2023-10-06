@@ -24,7 +24,12 @@ getKanalListesiBtn.addEventListener("click", () => {
                 } else if (line.trim() !== '') {
                     kanalURL = line;
                     const kanalItem = document.createElement("li");
-                    kanalItem.innerHTML = `<a href="${kanalURL}" target="_blank">${kanalAdi}</a>`;
+                    kanalItem.textContent = kanalAdi;
+                    kanalItem.addEventListener("click", () => {
+                        videoOynatici.src = kanalURL;
+                        videoOynatici.load();
+                        videoOynatici.play();
+                    });
                     kanalListesi.appendChild(kanalItem);
                 }
             });
