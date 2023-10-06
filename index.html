@@ -3,12 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPTV Kanal Gösterimi</title>
+    <title>IPTV Kanal Listesi ve Kanal Gösterimi</title>
 </head>
 <body>
-    <h1>IPTV Kanal Gösterimi</h1>
+    <h1>IPTV Kanal Listesi ve Kanal Gösterimi</h1>
 
-    <!-- Kanalı göstermek için iframe -->
-    <iframe src="http://pray45748.cdngold.me:80/7c8c640943/4574cdce6e/6681" width="800" height="600" frameborder="0"></iframe>
+    <!-- Kullanıcıdan URL almak için bir input ve buton ekleyin -->
+    <label for="iptvUrl">IPTV URL'si:</label>
+    <input type="text" id="iptvUrl">
+    <button onclick="getChannelList()">Kanal Listesini Al</button>
+
+    <!-- Kanal listesini göstermek için bir liste -->
+    <ul id="kanalListesi"></ul>
+
+    <!-- Seçilen kanalın gösterimi için bir iframe -->
+    <iframe id="kanalGosterimi" width="800" height="600" frameborder="0"></iframe>
+
+    <script>
+        // Kullanıcıdan alınan URL ile kanal listesini alın
+        function getChannelList() {
+            const iptvUrl = document.getElementById("iptvUrl").value;
+
+            fetch(iptvUrl)
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split("\n");
+                    const kanalListesi = [];
+
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i].startsWith("#EXTINF")) {
+                            kanalListesi.push(lines[i + 1]);
+                        }
+                    }
+
+                    // Kanal listesini HTML'de gösterin
+                    const kanalListesiElementi = document.getElementById("kanalListesi");
+                    kanalListesiElementi.innerHTML = ""; // Önceki listeyi temizleyin
+
+                    kanalListesi.forEach((kanal, index) => {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `<a href="#" onclick="showChannel('${kanal}')">Kanal ${index + 1}</a>`;
+                        kanalListesiElementi.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error("Hata:", error);
+                });
+        }
+
+        // Seçilen kanalı iframe içinde gösterin
+        function showChannel(channelUrl) {
+            const kanalGosterimiElementi = document.getElementById("kanalGosterimi");
+            kanalGosterimiElementi.src = channelUrl;
+        }
+    </script>
 </body>
 </html>
